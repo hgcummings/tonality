@@ -6,10 +6,10 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = "tonality";
-		cfg.useGL20 = false;
-		cfg.width = 480;
-		cfg.height = 320;
+		cfg.title = "Tonality v0.0.1";
+		cfg.useGL20 = true;
+		cfg.width = Constants.GAME_VIEWPORT_WIDTH;
+		cfg.height = Constants.GAME_VIEWPORT_HEIGHT;
 		
 		new LwjglApplication(new TonalityGame(), cfg);
 	}
