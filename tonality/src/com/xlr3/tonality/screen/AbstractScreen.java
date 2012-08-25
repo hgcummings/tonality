@@ -78,6 +78,7 @@ public abstract class AbstractScreen
     {
         font.dispose();
         batch.dispose();
+        skin.dispose();
     }
 
     protected Skin getSkin()
