@@ -82,8 +82,8 @@ public abstract class AbstractScreen
     protected Skin getSkin()
     {
         if( skin == null ) {
-            FileHandle skinFile = Gdx.files.internal( "skin/uiskin.json" );
-            skin = new Skin( skinFile );
+            FileHandle skinFile = Gdx.files.internal("skin/uiskin.json");
+            skin = new Skin(skinFile);
         }
         return skin;
     }
