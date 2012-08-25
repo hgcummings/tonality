@@ -8,8 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.xlr3.tonality.Constants;
+import com.xlr3.tonality.service.Sequence;
 
-public class ControlPanel {
+public class ControlPanel implements Sequence {
     private final Skin skin;
     private final Table table;
     private final Listener listener;

@@ -11,7 +11,7 @@ import javax.sound.midi.Sequencer;
 /*
  * See @link http://code.google.com/p/libgdx-users/wiki/MidiPlayerInterface
  */
-public class MidiPlayer implements com.xlr3.tonality.MidiPlayer {
+public class MidiPlayer implements com.xlr3.tonality.platform.MidiPlayer {
     private Sequence sequence;
     private Sequencer sequencer;
 

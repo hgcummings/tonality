@@ -1,4 +1,4 @@
-package com.xlr3.tonality;
+package com.xlr3.tonality.platform;
 
 import javax.sound.midi.Sequence;
 
