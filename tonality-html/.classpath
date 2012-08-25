@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" combineaccessrules="false" path="/tonality"/>
-	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tonality"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/tonality/libs/gdx.jar" sourcepath="/tonality/libs/gdx-sources.jar"/>
 	<classpathentry kind="lib" path="/tonality/libs/gdx-sources.jar"/>
