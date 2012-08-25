@@ -42,6 +42,7 @@ public abstract class AbstractScreen
     {
         // resize the stage
         stage.setViewport( width, height, true );
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override

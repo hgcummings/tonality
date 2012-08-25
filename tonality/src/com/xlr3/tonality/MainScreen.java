@@ -15,8 +15,8 @@ public class MainScreen extends AbstractScreen {
         table.setWidth(Constants.GAME_VIEWPORT_WIDTH /2);
         table.setHeight(Constants.GAME_VIEWPORT_HEIGHT);
 
-        int notes = 16;
-        int ticks = 16;
+        int notes = 5;
+        int ticks = 5;
 
         for (int note = 0; note < notes; note++)
         {
@@ -40,7 +40,7 @@ public class MainScreen extends AbstractScreen {
     }
 
     private Button createGridButton(int note, int tick) {
-        Button button = new Button(getSkin());
+        Button button = new Button(getSkin(), "toggle");
         button.addListener(new DefaultInputListener());
         return button;
     }
