@@ -46,7 +46,7 @@ public class SequencePlayer {
                 }
             }
 
-            midiPlayer.play(midiSequence);
+            midiPlayer.play(midiSequence, 240);
         } catch (InvalidMidiDataException e) {
             throw new RuntimeException(e);
         }

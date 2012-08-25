@@ -8,7 +8,7 @@ import javax.sound.midi.Sequence;
  * (writing the whole sequence out to a file then playing it back is OK)
  */
 public interface MidiPlayer {
-    public void play(Sequence sequence);
+    public void play(Sequence sequence, int tempo);
     public void dispose();
 }
 

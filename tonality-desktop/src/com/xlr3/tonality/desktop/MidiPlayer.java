@@ -12,7 +12,6 @@ import javax.sound.midi.Sequencer;
  * See @link http://code.google.com/p/libgdx-users/wiki/MidiPlayerInterface
  */
 public class MidiPlayer implements com.xlr3.tonality.platform.MidiPlayer {
-    private Sequence sequence;
     private Sequencer sequencer;
 
     public MidiPlayer()
@@ -25,7 +24,7 @@ public class MidiPlayer implements com.xlr3.tonality.platform.MidiPlayer {
     }
 
     @Override
-    public void play(Sequence sequence) {
+    public void play(Sequence sequence, int tempo) {
         if (sequencer.isRunning()) {
             sequencer.stop();
         }
@@ -36,6 +35,7 @@ public class MidiPlayer implements com.xlr3.tonality.platform.MidiPlayer {
             }
 
             sequencer.setSequence(sequence);
+            sequencer.setTempoInBPM(tempo);
             sequencer.start();
         } catch (Exception e) {
             Gdx.app.log(TonalityGame.LOG, "Could not play MIDI sequencer");
