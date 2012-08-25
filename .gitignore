@@ -3,3 +3,4 @@
 **/*.eml
 **/bin/**
 tonality-desktop/assets/**
+**/gen/**

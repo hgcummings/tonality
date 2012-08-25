@@ -31,8 +31,7 @@ public class MidiPlayer implements com.xlr3.tonality.platform.MidiPlayer {
         }
 
         try {
-            if (!sequencer.isOpen())
-            {
+            if (!sequencer.isOpen()) {
                 sequencer.open();
             }
 
