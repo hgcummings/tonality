@@ -16,7 +16,7 @@ public class TonalityGame extends Game {
 
 	@Override
 	public void create() {		
-		setScreen(new MainScreen(midiPlayer, new Options(6, 6, 1, 0.1f, 1000)));
+		setScreen(new MainScreen(midiPlayer, new Options(6, 6, 1, 0.2f, 2000)));
 	}
 
     @Override
