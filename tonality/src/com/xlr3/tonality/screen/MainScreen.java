@@ -41,7 +41,10 @@ public class MainScreen extends AbstractScreen implements GenericListener<Contro
 
     public void launchSequence() {
         Sequence sequence = Sequence.createClone(options.notes, options.ticks, controlPanel);
-        if (!colony.dispatchSequence(sequence)) {
+        int hits;
+        if ((hits = colony.dispatchSequence(sequence)) != 0) {
+            Constants.HIT.play(hits / 100f);
+        } else {
             sequencePlayer.playSequence(sequence.getNormalised(), Constants.TEMPO);
         }
     }

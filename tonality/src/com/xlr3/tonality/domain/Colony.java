@@ -1,9 +1,7 @@
 package com.xlr3.tonality.domain;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.*;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.ReflectionPool;
 import com.badlogic.gdx.utils.SnapshotArray;
@@ -15,8 +13,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Colony {
-    private Pool<Bacterium> pool = new ReflectionPool<Bacterium>(Bacterium.class, 512, 1024);
-    private Group group;
+    private Pool<Bacterium> livePool = new ReflectionPool<Bacterium>(Bacterium.class, 128, 1024);
+    private Pool<DyingBacterium> deadPool = new ReflectionPool<DyingBacterium>(DyingBacterium.class, 32, 256);
+    private Group liveGroup;
+    private Group deadGroup;
     private Random random = new Random();
     private int population;
     private int activeSequences;
@@ -41,42 +41,50 @@ public class Colony {
     }
 
     public Actor getActor() {
-        group = new Group();
+        deadGroup = createGroup();
+        liveGroup = createGroup();
 
-        group.setX(0);
-        group.setY(0);
+        Group combinedGroup = createGroup();
 
-        group.setWidth(Constants.GAME_VIEWPORT_WIDTH / 2);
-        group.setHeight(Constants.GAME_VIEWPORT_HEIGHT);
-
-        Bacterium bacterium = pool.obtain();
+        Bacterium bacterium = livePool.obtain();
         bacterium.initialise(
                 Constants.GAME_VIEWPORT_WIDTH / 4,
                 Constants.GAME_VIEWPORT_HEIGHT / 2,
                 Sequence.create(options),
                 inputListener);
-        group.addActor(bacterium);
+        liveGroup.addActor(bacterium);
         population = 1;
 
+        combinedGroup.addActor(deadGroup);
+        combinedGroup.addActor(liveGroup);
+
+        return combinedGroup;
+    }
+
+    private Group createGroup() {
+        Group group = new Group();
+        group.setWidth(Constants.GAME_VIEWPORT_WIDTH / 2);
+        group.setHeight(Constants.GAME_VIEWPORT_HEIGHT);
         return group;
     }
 
+
     public void updateState(float totalTime) {
-        for (Actor actor : group.getChildren()) {
+        for (Actor actor : liveGroup.getChildren()) {
             Bacterium bacterium = (Bacterium) actor;
 
             if ((activeSequences == 1 && (population == 1 || totalTime < options.startPhase)) || bacterium.getAge() > random.nextFloat() * options.maxAge) {
-                group.removeActor(bacterium);
-                group.addActor(createChild(bacterium, false));
+                liveGroup.removeActor(bacterium);
+                liveGroup.addActor(createChild(bacterium, false));
 
                 if (activeSequences == 1 || options.mutationRate > random.nextFloat()) {
-                    group.addActor(createChild(bacterium, true));
+                    liveGroup.addActor(createChild(bacterium, true));
                     activeSequences++;
                 } else {
-                    group.addActor(createChild(bacterium, false));
+                    liveGroup.addActor(createChild(bacterium, false));
                 }
 
-                pool.free(bacterium);
+                livePool.free(bacterium);
                 population++;
             }
         }
@@ -86,11 +94,13 @@ public class Colony {
         return population;
     }
 
-    public boolean dispatchSequence(Sequence sequence) {
+    public int dispatchSequence(Sequence sequence) {
+        int hits = 0;
+
         ArrayList<Sequence> matchedSequences = new ArrayList<Sequence>();
         ArrayList<Sequence> unmatchedSequences = new ArrayList<Sequence>(activeSequences);
 
-        SnapshotArray<Actor> children = group.getChildren();
+        SnapshotArray<Actor> children = liveGroup.getChildren();
         Actor[] actors = children.begin();
         for (int i = 0, n = children.size; i < n; i++) {
             Bacterium bacterium = (Bacterium) actors[i];
@@ -110,20 +120,26 @@ public class Colony {
             }
 
             if (match) {
-                group.removeActor(bacterium);
-                pool.free(bacterium);
-                population--;
-                bacteriaKilled++;
+                liveGroup.removeActor(bacterium);
+
+                DyingBacterium dyingBacterium = deadPool.obtain();
+                dyingBacterium.initialise(bacterium.getX(), bacterium.getY(), deadPool);
+                deadGroup.addActor(dyingBacterium);
+
+                livePool.free(bacterium);
+                hits++;
             }
         }
         children.end();
 
+        population -= hits;
+        bacteriaKilled += hits;
         activeSequences -= matchedSequences.size();
-        return matchedSequences.size() != 0;
+        return hits;
     }
 
     private Bacterium createChild(Bacterium parent, boolean mutate) {
-        Bacterium child = pool.obtain();
+        Bacterium child = livePool.obtain();
 
         child.initialise(
                 parent.getX(),
