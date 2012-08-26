@@ -1,6 +1,8 @@
 package com.xlr3.tonality.domain;
 
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -65,7 +67,7 @@ public class ControlPanel implements Sequence {
                 table.add(button).uniform().fill().expand();
                 button.addListener(new InputListener() {
                     @Override
-                    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                         Constants.SELECT.play(0.5f);
                         return false;
                     }

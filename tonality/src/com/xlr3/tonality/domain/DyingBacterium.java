@@ -1,8 +1,6 @@
 package com.xlr3.tonality.domain;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Pool;
-import com.xlr3.tonality.TonalityGame;
 
 import java.util.Random;
 
