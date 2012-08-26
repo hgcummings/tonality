@@ -8,9 +8,9 @@ import com.xlr3.tonality.Score;
 import com.xlr3.tonality.TonalityGame;
 import com.xlr3.tonality.platform.MidiPlayer;
 import com.xlr3.tonality.service.SequencePlayer;
-import com.xlr3.tonality.ui.Colony;
-import com.xlr3.tonality.ui.ControlPanel;
-import com.xlr3.tonality.ui.Sequence;
+import com.xlr3.tonality.domain.Colony;
+import com.xlr3.tonality.domain.ControlPanel;
+import com.xlr3.tonality.domain.Sequence;
 
 public class MainScreen extends AbstractScreen implements GenericListener<ControlPanel.EventType> {
     private final Colony colony;

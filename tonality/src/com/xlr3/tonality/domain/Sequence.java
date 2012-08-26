@@ -1,4 +1,4 @@
-package com.xlr3.tonality.ui;
+package com.xlr3.tonality.domain;
 
 import com.xlr3.tonality.Options;
 
