@@ -15,3 +15,7 @@ LibGDX, sfxr/bfxr, IntelliJ IDEA, Paint.NET
 * HTML5/WebGL port
 * Android port
 * 'Evolution' applied to options parameters (via HTML5/WebGL port)
+* Better bacterium graphics
+* Better mitosis and death animations
+* Powerups (e.g. inhibit mitosis?)
+* Sub-sequence matching?

@@ -7,24 +7,23 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.ReflectionPool;
 import com.badlogic.gdx.utils.SnapshotArray;
-import com.xlr3.tonality.Constants;
+import com.xlr3.tonality.Globals;
 import com.xlr3.tonality.Options;
 import com.xlr3.tonality.service.SequencePlayer;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Colony {
     private Pool<Bacterium> livePool = new ReflectionPool<Bacterium>(Bacterium.class, 128, 1024);
     private Pool<DyingBacterium> deadPool = new ReflectionPool<DyingBacterium>(DyingBacterium.class, 32, 256);
     private Group liveGroup;
     private Group deadGroup;
-    private Random random = new Random();
     private int population;
     private int activeSequences;
     private final Options options;
     private final InputListener inputListener;
     private int bacteriaKilled;
+    private boolean inhibitSplitting;
 
     public Colony(Options options, final SequencePlayer sequencePlayer) {
         this.options = options;
@@ -33,7 +32,7 @@ public class Colony {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Bacterium bacterium = (Bacterium) event.getListenerActor();
-                sequencePlayer.playSequence(bacterium.getSequence().getNormalised(), Constants.TEMPO);
+                sequencePlayer.playSequence(bacterium.getSequence().getNormalised(), Globals.TEMPO);
                 return true;
             }
         };
@@ -42,7 +41,7 @@ public class Colony {
         this.bacteriaKilled = 0;
     }
 
-    public Actor getActor() {
+    public Group getActor() {
         deadGroup = createGroup();
         liveGroup = createGroup();
 
@@ -50,10 +49,11 @@ public class Colony {
 
         Bacterium bacterium = livePool.obtain();
         bacterium.initialise(
-                Constants.GAME_VIEWPORT_WIDTH / 4,
-                Constants.GAME_VIEWPORT_HEIGHT / 2,
+                Globals.GAME_VIEWPORT_WIDTH / 4,
+                Globals.GAME_VIEWPORT_HEIGHT / 2,
                 Sequence.create(options),
                 inputListener);
+        bacterium.setName(Bacterium.FIRST);
         liveGroup.addActor(bacterium);
         population = 1;
 
@@ -65,21 +65,25 @@ public class Colony {
 
     private Group createGroup() {
         Group group = new Group();
-        group.setWidth(Constants.GAME_VIEWPORT_WIDTH / 2);
-        group.setHeight(Constants.GAME_VIEWPORT_HEIGHT);
+        group.setWidth(Globals.GAME_VIEWPORT_WIDTH / 2);
+        group.setHeight(Globals.GAME_VIEWPORT_HEIGHT);
         return group;
     }
 
-
     public void updateState(float totalTime) {
+        if (inhibitSplitting) {
+            return;
+        }
+
         for (Actor actor : liveGroup.getChildren()) {
             Bacterium bacterium = (Bacterium) actor;
 
-            if ((activeSequences == 1 && (population == 1 || totalTime < options.startPhase)) || bacterium.getAge() > random.nextFloat() * options.maxAge) {
+            if ((activeSequences == 1 && (population == 1 || totalTime < options.startPhase))
+                    || bacterium.getAge() > Globals.RANDOM.nextFloat() * options.maxAge) {
                 liveGroup.removeActor(bacterium);
                 liveGroup.addActor(createChild(bacterium, false));
 
-                if (activeSequences == 1 || options.mutationRate > random.nextFloat()) {
+                if (activeSequences == 1 || options.mutationRate > Globals.RANDOM.nextFloat()) {
                     liveGroup.addActor(createChild(bacterium, true));
                     activeSequences++;
                 } else {
@@ -138,6 +142,14 @@ public class Colony {
         bacteriaKilled += hits;
         activeSequences -= matchedSequences.size();
         return hits;
+    }
+
+    public boolean initialised() {
+        return liveGroup != null;
+    }
+
+    public void setInhibitSplitting(boolean value) {
+        this.inhibitSplitting = value;
     }
 
     private Bacterium createChild(Bacterium parent, boolean mutate) {

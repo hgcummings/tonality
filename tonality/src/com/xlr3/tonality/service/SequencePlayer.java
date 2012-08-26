@@ -1,5 +1,6 @@
 package com.xlr3.tonality.service;
 
+import com.xlr3.tonality.Globals;
 import com.xlr3.tonality.Options;
 import com.xlr3.tonality.platform.MidiPlayer;
 
@@ -22,7 +23,14 @@ public class SequencePlayer {
         this.midiPlayer = midiPlayer;
         this.notes = new int[options.notes];
 
-        int note = 60;
+        int note;
+
+        if (options.rootNote == null) {
+            note = Globals.RANDOM.nextInt(13) + 48;
+        } else {
+            note = options.rootNote;
+        }
+
         for (int i = 0; i < options.notes; i++) {
             notes[i] = note;
             note += INTERVALS_PENTATONIC[i % INTERVALS_PENTATONIC.length];

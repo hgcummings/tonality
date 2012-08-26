@@ -3,10 +3,7 @@ package com.xlr3.tonality;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.xlr3.tonality.platform.MidiPlayer;
-import com.xlr3.tonality.screen.GameOverScreen;
-import com.xlr3.tonality.screen.GenericListener;
-import com.xlr3.tonality.screen.IntroScreen;
-import com.xlr3.tonality.screen.MainScreen;
+import com.xlr3.tonality.screen.*;
 
 public class TonalityGame extends Game {
     private MidiPlayer midiPlayer;
@@ -19,18 +16,51 @@ public class TonalityGame extends Game {
 
     @Override
     public void create() {
-        setScreen(new IntroScreen(new IntroScreen.ExitListener() {
+        launchIntroScreen();
+    }
+
+    private void launchIntroScreen() {
+        setScreen(new IntroScreen(new GenericListener<IntroScreen.ButtonType>() {
             @Override
-            public void exit() {
-                launchMainScreen();
+            public void fire(IntroScreen.ButtonType payload) {
+                switch (payload) {
+                    case TUTORIAL:
+                        launchTutorialScreen();
+                        break;
+                    case GAME:
+                        launchMainScreen();
+                        break;
+                    /*case OPTIONS:
+                        launchOptionsScreen();
+                        break;*/
+                    default:
+                        Gdx.app.log(TonalityGame.LOG, "Unrecognised intro screen button type " + payload);
+                }
             }
         }));
+    }
+
+    private void launchTutorialScreen() {
+        setScreen(new TutorialScreen(
+                midiPlayer,
+                Options.DEFAULT,
+                new GenericListener<Boolean>() {
+                    @Override
+                    public void fire(Boolean payload) {
+                        if (payload) {
+                            launchMainScreen();
+                        } else {
+                            launchIntroScreen();
+                        }
+                    }
+                }
+        ));
     }
 
     private void launchMainScreen() {
         setScreen(new MainScreen(
                 midiPlayer,
-                new Options(6, 6, 1, 0.2f, 2000, 60),
+                Options.DEFAULT,
                 new GenericListener<Score>() {
                     @Override
                     public void fire(Score payload) {

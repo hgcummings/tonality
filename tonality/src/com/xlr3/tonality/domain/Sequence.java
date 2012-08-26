@@ -1,12 +1,9 @@
 package com.xlr3.tonality.domain;
 
+import com.xlr3.tonality.Globals;
 import com.xlr3.tonality.Options;
 
-import java.util.Random;
-
 public class Sequence implements com.xlr3.tonality.service.Sequence {
-    private static Random random = new Random();
-
     private final boolean[][] notes;
     private final int ticks;
 
@@ -90,7 +87,7 @@ public class Sequence implements com.xlr3.tonality.service.Sequence {
     public Sequence createMutation() {
         Sequence newSequence = this.createClone();
         // Half the mutations 'move' a note, others add a new one
-        if (random.nextFloat() > 0.5f) {
+        if (Globals.RANDOM.nextFloat() > 0.5f) {
             newSequence.removeNote();
         }
         newSequence.addNote();
@@ -98,12 +95,12 @@ public class Sequence implements com.xlr3.tonality.service.Sequence {
     }
 
     private void removeNote() {
-        int note = random.nextInt(notes.length);
-        int tick = random.nextInt(ticks);
+        int note = Globals.RANDOM.nextInt(notes.length);
+        int tick = Globals.RANDOM.nextInt(ticks);
 
         while (!notes[note][tick]) {
-            note = random.nextInt(notes.length);
-            tick = random.nextInt(ticks);
+            note = Globals.RANDOM.nextInt(notes.length);
+            tick = Globals.RANDOM.nextInt(ticks);
         }
 
         notes[note][tick] = false;
@@ -143,17 +140,17 @@ public class Sequence implements com.xlr3.tonality.service.Sequence {
 
         // Favour melodic complexity before harmonic
         for (int tick = 0; tick < ticks; tick++) {
-            float weighting = random.nextFloat() * (ticks - tickNoteCount(tick));
+            float weighting = Globals.RANDOM.nextFloat() * (ticks - tickNoteCount(tick));
             if (weighting > max) {
                 max = weighting;
                 chosenTick = tick;
             }
         }
 
-        int chosenNote = random.nextInt(notes.length);
+        int chosenNote = Globals.RANDOM.nextInt(notes.length);
 
         while (getActive(chosenNote, chosenTick)) {
-            chosenNote = random.nextInt(notes.length);
+            chosenNote = Globals.RANDOM.nextInt(notes.length);
         }
 
         notes[chosenNote][chosenTick] = true;

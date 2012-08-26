@@ -3,7 +3,7 @@ package com.xlr3.tonality.desktop;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.xlr3.tonality.Constants;
+import com.xlr3.tonality.Globals;
 import com.xlr3.tonality.TonalityGame;
 
 import java.net.URL;
@@ -32,8 +32,8 @@ public class Main {
         }
 
 		cfg.useGL20 = true;
-		cfg.width = Constants.GAME_VIEWPORT_WIDTH;
-		cfg.height = Constants.GAME_VIEWPORT_HEIGHT;
+		cfg.width = Globals.GAME_VIEWPORT_WIDTH;
+		cfg.height = Globals.GAME_VIEWPORT_HEIGHT;
 
         new LwjglApplication(new TonalityGame(new MidiPlayer()), cfg);
 	}

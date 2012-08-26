@@ -2,10 +2,12 @@ package com.xlr3.tonality.domain;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.xlr3.tonality.Globals;
 
 public class Bacterium extends BacteriumBase {
     private final Vector2 velocity;
     private Sequence sequence;
+    public static final String FIRST = "First";
 
     public Bacterium() {
         this.velocity = new Vector2();
@@ -13,8 +15,8 @@ public class Bacterium extends BacteriumBase {
 
     public void initialise(float x, float y, Sequence sequence, InputListener inputListener) {
         super.initialise(x, y);
-        this.velocity.x = random.nextFloat() - 0.5f;
-        this.velocity.y = random.nextFloat() - 0.5f;
+        this.velocity.x = Globals.RANDOM.nextFloat() - 0.5f;
+        this.velocity.y = Globals.RANDOM.nextFloat() - 0.5f;
         this.sequence = sequence;
         this.addListener(inputListener);
     }

@@ -3,7 +3,7 @@ package com.xlr3.tonality.screen;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.xlr3.tonality.Constants;
+import com.xlr3.tonality.Globals;
 import com.xlr3.tonality.Score;
 
 public class GameOverScreen extends AbstractScreen {
@@ -14,8 +14,8 @@ public class GameOverScreen extends AbstractScreen {
 
         Table table = new Table(getSkin());
 
-        table.setWidth(Constants.GAME_VIEWPORT_WIDTH);
-        table.setHeight(Constants.GAME_VIEWPORT_HEIGHT);
+        table.setWidth(Globals.GAME_VIEWPORT_WIDTH);
+        table.setHeight(Globals.GAME_VIEWPORT_HEIGHT);
 
         table.add(TableUtils.createLabel("GAME OVER!", getSkin())).colspan(2).height(50);
         table.row();

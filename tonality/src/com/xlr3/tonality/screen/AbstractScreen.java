@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.xlr3.tonality.Constants;
+import com.xlr3.tonality.Globals;
 
 /**
  * The base class for all game screens.
@@ -25,7 +25,7 @@ public abstract class AbstractScreen
     public AbstractScreen() {
         this.font = new BitmapFont();
         this.batch = new SpriteBatch();
-        this.stage = new Stage(Constants.GAME_VIEWPORT_WIDTH, Constants.GAME_VIEWPORT_HEIGHT, true);
+        this.stage = new Stage(Globals.GAME_VIEWPORT_WIDTH, Globals.GAME_VIEWPORT_HEIGHT, true);
     }
 
     @Override

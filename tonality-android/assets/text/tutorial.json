@@ -1,0 +1,40 @@
+{
+  welcome: "Welcome to the tonality: evolution tutorial
+
+The grid on the right shows a seqence
+of notes. Try hitting the 'Go!' button
+at the bottom of the grid...",
+  grid: "Great!
+  
+The cells in the grid can be toggled on
+and off: Experiment with altering some
+cells and clicking the 'Go!' button again...",
+  grid-next: "Awesome!
+  
+Click the 'next' button below when you're
+ready to continue...",
+  bacterium: "This little guy is a bacterium
+
+It's your job to fight bacteria by
+sequencing their DNA. How do you do that?
+Well, start by tapping the bacterium below...",
+  sequence: "That melody is the bacterium's genetic code.
+Can you reproduce it in the grid on the right?
+
+Hit 'Go!' to test out your attempt, or tap the
+bacterium again if you need a reminder.",
+  miss: "Not bad! Keep trying...",
+  hit: "You got him - good work!
+  
+Now you're ready for the real thing.
+
+Note that bacteria increase their numbers
+by dividing, and sometimes a mutation
+causes a change in their DNA sequence.
+
+... So you'll need to react quickly if you
+want to keep the colony under control.
+
+Click 'Start', below, to begin playing, or
+'Exit tutorial' to return to the main menu."
+}

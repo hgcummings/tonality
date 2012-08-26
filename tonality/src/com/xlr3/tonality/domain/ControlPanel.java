@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.xlr3.tonality.Constants;
+import com.xlr3.tonality.Globals;
 import com.xlr3.tonality.screen.ButtonListener;
 import com.xlr3.tonality.screen.GenericListener;
 import com.xlr3.tonality.service.Sequence;
@@ -38,6 +38,10 @@ public class ControlPanel implements Sequence {
         return noteButtons[note][tick].isChecked();
     }
 
+    public void setActive(int note, int tick, boolean value) {
+        noteButtons[note][tick].setChecked(value);
+    }
+
     @Override
     public int getLength() {
         return ticks;
@@ -52,11 +56,11 @@ public class ControlPanel implements Sequence {
     private Table buildTable(int notes, int ticks) {
         Table table = new Table();
 
-        table.setX(Constants.GAME_VIEWPORT_WIDTH / 2);
+        table.setX(Globals.GAME_VIEWPORT_WIDTH / 2);
         table.setY(0);
 
-        table.setWidth(Constants.GAME_VIEWPORT_WIDTH / 2);
-        table.setHeight(Constants.GAME_VIEWPORT_HEIGHT);
+        table.setWidth(Globals.GAME_VIEWPORT_WIDTH / 2);
+        table.setHeight(Globals.GAME_VIEWPORT_HEIGHT);
 
         noteButtons = new Button[notes][ticks];
 
@@ -68,7 +72,7 @@ public class ControlPanel implements Sequence {
                 button.addListener(new InputListener() {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        Constants.SELECT.play(0.5f);
+                        Globals.SOUND_SELECT.play(0.5f);
                         return false;
                     }
                 });
@@ -85,7 +89,7 @@ public class ControlPanel implements Sequence {
     private Button buildButton(Table table, String name, EventType eventType) {
         TextButton button = new TextButton(name, skin);
         button.addListener(new ButtonListener<EventType>(eventType, this.listener));
-        table.add(button).colspan(ticks).fillX().height(Constants.GAME_VIEWPORT_HEIGHT / (notes + 1));
+        table.add(button).colspan(ticks).fillX().height(Globals.GAME_VIEWPORT_HEIGHT / (notes + 1));
         return button;
     }
 

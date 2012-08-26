@@ -3,7 +3,7 @@ package com.xlr3.tonality.screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.xlr3.tonality.Constants;
+import com.xlr3.tonality.Globals;
 
 public class ButtonListener<T> extends InputListener {
     private T payload;
@@ -21,8 +21,12 @@ public class ButtonListener<T> extends InputListener {
             float y,
             int pointer,
             int button) {
-        Constants.SELECT.play(0.5f);
-        return !((Button) event.getListenerActor()).isDisabled();
+        if (((Button) event.getListenerActor()).isDisabled()) {
+            return false;
+        } else {
+            Globals.SOUND_SELECT.play(0.5f);
+            return true;
+        }
     }
 
     @Override

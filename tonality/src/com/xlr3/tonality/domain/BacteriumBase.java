@@ -5,17 +5,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.xlr3.tonality.Constants;
-
-import java.util.Random;
+import com.xlr3.tonality.Globals;
 
 public abstract class BacteriumBase extends Image {
     protected static final int SIZE = 32;
-    protected static final int MAX_EXTENT_X = (Constants.GAME_VIEWPORT_WIDTH / 2) - SIZE;
-    protected static final int MAX_EXTENT_Y = (Constants.GAME_VIEWPORT_HEIGHT) - SIZE;
-
-    protected static Random random = new Random();
-
+    protected static final int MAX_EXTENT_X = (Globals.GAME_VIEWPORT_WIDTH / 2) - SIZE;
+    protected static final int MAX_EXTENT_Y = (Globals.GAME_VIEWPORT_HEIGHT) - SIZE;
     private float age;
 
     public BacteriumBase() {

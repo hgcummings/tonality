@@ -1,11 +1,9 @@
 package com.xlr3.tonality.domain;
 
 import com.badlogic.gdx.utils.Pool;
-
-import java.util.Random;
+import com.xlr3.tonality.Globals;
 
 public class DyingBacterium extends BacteriumBase {
-    private static Random random = new Random();
     private static final Float MAX_AGE = 0.5f;
     private Pool<DyingBacterium> returnPool;
 
@@ -27,7 +25,7 @@ public class DyingBacterium extends BacteriumBase {
         this.size(-SIZE * (delta / MAX_AGE));
         this.invalidate();
 
-        tryUpdateX(delta * (random.nextFloat() - 0.5f) * 100);
-        tryUpdateY(delta * (random.nextFloat() - 0.5f) * 100);
+        tryUpdateX(delta * (Globals.RANDOM.nextFloat() - 0.5f) * 100);
+        tryUpdateY(delta * (Globals.RANDOM.nextFloat() - 0.5f) * 100);
     }
 }

@@ -2,9 +2,8 @@ package com.xlr3.tonality.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.xlr3.tonality.Constants;
+import com.xlr3.tonality.Globals;
 import com.xlr3.tonality.Options;
-import com.xlr3.tonality.Score;
 import com.xlr3.tonality.TonalityGame;
 import com.xlr3.tonality.domain.Colony;
 import com.xlr3.tonality.domain.ControlPanel;
@@ -12,17 +11,17 @@ import com.xlr3.tonality.domain.Sequence;
 import com.xlr3.tonality.platform.MidiPlayer;
 import com.xlr3.tonality.service.SequencePlayer;
 
-public abstract class GameScreen extends AbstractScreen implements GenericListener<ControlPanel.EventType> {
-    private final Colony colony;
-    private final ControlPanel controlPanel;
+public abstract class GameScreen<T> extends AbstractScreen implements GenericListener<ControlPanel.EventType> {
+    protected final Colony colony;
+    protected final ControlPanel controlPanel;
     private final SequencePlayer sequencePlayer;
-    private final Label populationLabel;
-    private final Label sequencesLabel;
-    private final Options options;
-    private GenericListener<Score> exitListener;
-    private float totalTime = 0f;
+    protected final Label populationLabel;
+    protected final Label sequencesLabel;
+    protected final Options options;
+    protected GenericListener<T> exitListener;
+    protected float totalTime = 0f;
 
-    public GameScreen(MidiPlayer midiPlayer, Options options, GenericListener<Score> exitListener) {
+    public GameScreen(MidiPlayer midiPlayer, Options options, GenericListener<T> exitListener) {
         this.options = options;
         this.exitListener = exitListener;
         this.sequencePlayer = new SequencePlayer(midiPlayer, options);
@@ -31,21 +30,18 @@ public abstract class GameScreen extends AbstractScreen implements GenericListen
         this.controlPanel = new ControlPanel(getSkin(), options.notes, options.ticks, this);
         this.populationLabel = new Label(getPopulationText(), getSkin());
         this.sequencesLabel = new Label(getSequencesText(), getSkin());
-        sequencesLabel.setX(Constants.GAME_VIEWPORT_WIDTH / 4);
+        sequencesLabel.setX(Globals.GAME_VIEWPORT_WIDTH / 4);
 
-        stage.addActor(colony.getActor());
         stage.addActor(controlPanel.getActor());
-        stage.addActor(populationLabel);
-        stage.addActor(sequencesLabel);
     }
 
-    public void launchSequence() {
+    protected void launchSequence() {
         Sequence sequence = Sequence.createClone(options.notes, options.ticks, controlPanel);
         int hits;
-        if ((hits = colony.dispatchSequence(sequence)) != 0) {
-            Constants.HIT.play(hits / 100f);
+        if (colony.initialised() && ((hits = colony.dispatchSequence(sequence)) != 0)) {
+            Globals.SOUND_HIT.play(hits / 100f);
         } else {
-            sequencePlayer.playSequence(sequence.getNormalised(), Constants.TEMPO);
+            sequencePlayer.playSequence(sequence.getNormalised(), Globals.TEMPO);
         }
     }
 
@@ -64,9 +60,8 @@ public abstract class GameScreen extends AbstractScreen implements GenericListen
     @Override
     public void render(float delta) {
         totalTime += delta;
-        colony.updateState(totalTime);
-        if (colony.getPopulation() > 1000 || colony.getPopulation() == 0) {
-            exitListener.fire(new Score(totalTime, colony.getBacteriaKilled()));
+        if (colony.initialised()) {
+            colony.updateState(totalTime);
         }
         populationLabel.setText(getPopulationText());
         sequencesLabel.setText(getSequencesText());
