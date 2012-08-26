@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.xlr3.tonality.Constants;
 import com.xlr3.tonality.Options;
+import com.xlr3.tonality.Score;
 import com.xlr3.tonality.platform.MidiPlayer;
 import com.xlr3.tonality.service.SequencePlayer;
 import com.xlr3.tonality.TonalityGame;
@@ -11,16 +12,19 @@ import com.xlr3.tonality.ui.Colony;
 import com.xlr3.tonality.ui.ControlPanel;
 import com.xlr3.tonality.ui.Sequence;
 
-public class MainScreen extends AbstractScreen implements ControlPanel.Listener {
+public class MainScreen extends AbstractScreen implements GenericListener<ControlPanel.EventType> {
     private final Colony colony;
     private final ControlPanel controlPanel;
     private final SequencePlayer sequencePlayer;
     private final Label populationLabel;
     private final Label sequencesLabel;
     private final Options options;
+    private GenericListener<Score> exitListener;
+    private float totalTime = 0f;
 
-    public MainScreen(MidiPlayer midiPlayer, Options options) {
+    public MainScreen(MidiPlayer midiPlayer, Options options, GenericListener<Score> exitListener) {
         this.options = options;
+        this.exitListener = exitListener;
         this.sequencePlayer = new SequencePlayer(midiPlayer, options);
 
         this.colony = new Colony(options, sequencePlayer);
@@ -36,7 +40,7 @@ public class MainScreen extends AbstractScreen implements ControlPanel.Listener 
     }
 
     public void testSequence() {
-        sequencePlayer.playSequence(controlPanel);
+        sequencePlayer.playSequence(controlPanel, Constants.TEMPO);
     }
 
     public void dispatchSequence() {
@@ -45,7 +49,7 @@ public class MainScreen extends AbstractScreen implements ControlPanel.Listener 
     }
 
     @Override
-    public void raise(ControlPanel.EventType eventType) {
+    public void fire(ControlPanel.EventType eventType) {
         switch (eventType) {
             case TEST:
                 testSequence();
@@ -61,12 +65,13 @@ public class MainScreen extends AbstractScreen implements ControlPanel.Listener 
 
     @Override
     public void render(float delta) {
+        totalTime += delta;
         colony.updateState();
+        if (colony.getPopulation() > 1000 || colony.getPopulation() == 0) {
+            exitListener.fire(new Score(totalTime, colony.getBacteriaKilled()));
+        }
         populationLabel.setText(getPopulationText());
         sequencesLabel.setText(getSequencesText());
-        if (colony.getActiveSequences() > 1) {
-            controlPanel.activate();
-        }
         super.render(delta);
     }
 

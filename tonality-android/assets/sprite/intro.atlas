@@ -1,0 +1,25 @@
+intro.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+intro/guide-1
+  rotate: false
+  xy: 1, 1
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+intro/guide-2
+  rotate: false
+  xy: 128, 1
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+intro/guide-1
+  rotate: false
+  xy: 1, 128
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1

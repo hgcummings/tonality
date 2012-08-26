@@ -1,39 +1,37 @@
 package com.xlr3.tonality.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.xlr3.tonality.Constants;
+import com.xlr3.tonality.screen.ButtonListener;
+import com.xlr3.tonality.screen.GenericListener;
 import com.xlr3.tonality.service.Sequence;
 
 public class ControlPanel implements Sequence {
     private final Skin skin;
     private final Table table;
-    private final Listener listener;
+    private final GenericListener<EventType> listener;
+    private final int ticks;
 
     public static enum EventType {
         TEST,
         DISPATCH
     }
 
-    public static interface Listener {
-        public void raise(EventType eventType);
-    }
-
     public ControlPanel(
             Skin skin,
             int notes,
             int ticks,
-            Listener listener
+            GenericListener<EventType> listener
         )
     {
         this.skin = skin;
-        this.table = buildTable(notes, ticks);
         this.listener = listener;
+        this.ticks = ticks;
+        this.table = buildTable(notes, ticks);
     }
 
     public boolean getActive(int note, int tick)
@@ -41,17 +39,17 @@ public class ControlPanel implements Sequence {
         return noteButtons[note][tick].isChecked();
     }
 
+    @Override
+    public int getLength() {
+        return ticks;
+    }
+
     public Actor getActor()
     {
         return table;
     }
 
-    public void activate() {
-        dispatchButton.setDisabled(false);
-    }
-
     private Button[][] noteButtons;
-    private Button dispatchButton;
 
     private Table buildTable(int notes, int ticks) {
         Table table = new Table();
@@ -75,8 +73,7 @@ public class ControlPanel implements Sequence {
         }
 
         buildButton(table, ticks, "Test", EventType.TEST);
-        dispatchButton = buildButton(table, ticks, "Dispatch", EventType.DISPATCH);
-        dispatchButton.setDisabled(true);
+        buildButton(table, ticks, "Dispatch", EventType.DISPATCH);
 
         return table;
     }
@@ -84,33 +81,10 @@ public class ControlPanel implements Sequence {
     private Button buildButton(Table table, int colSpan, String name, EventType eventType) {
         table.row().expandX();
         TextButton button = new TextButton(name, skin);
-        button.addListener(new ButtonListener(eventType));
+        button.addListener(new ButtonListener<EventType>(eventType, this.listener));
         table.add(button).colspan(colSpan).fillX();
         return button;
     }
 
-    private class ButtonListener extends InputListener
-    {
-        private EventType eventType;
 
-        public ButtonListener(EventType eventType)
-        {
-            this.eventType = eventType;
-        }
-
-        @Override
-        public boolean touchDown(
-                InputEvent event,
-                float x,
-                float y,
-                int pointer,
-                int button )
-        {
-            if (((Button)event.getListenerActor()).isDisabled()) {
-                return false;
-            }
-            listener.raise(eventType);
-            return true;
-        }
-    }
 }

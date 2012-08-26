@@ -54,6 +54,7 @@ public class Sequence implements com.xlr3.tonality.service.Sequence {
         return -1;
     }
 
+    @Override
     public int getLength() {
         return getEnd() - getStart() + 1;
     }
@@ -93,6 +94,20 @@ public class Sequence implements com.xlr3.tonality.service.Sequence {
 
     public Sequence createClone() {
         return createClone(this.notes.length, this.ticks, this);
+    }
+
+    public com.xlr3.tonality.service.Sequence getNormalised() {
+        return new com.xlr3.tonality.service.Sequence() {
+            @Override
+            public boolean getActive(int note, int tick) {
+                return notes[note][tick + getStart()];
+            }
+
+            @Override
+            public int getLength() {
+                return Sequence.this.getLength();
+            }
+        };
     }
 
     public static Sequence createClone(int notes, int ticks, com.xlr3.tonality.service.Sequence parent) {

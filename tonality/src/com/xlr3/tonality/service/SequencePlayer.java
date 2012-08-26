@@ -14,10 +14,9 @@ import javax.sound.midi.Track;
  */
 public class SequencePlayer {
     private final int[] notes;
-    private final int ticks;
     private final MidiPlayer midiPlayer;
 
-    private final int[] INTERVALS_PENTATONIC = new int[] { 2, 3, 2, 2, 3 };
+    private static final int[] INTERVALS_PENTATONIC = new int[] { 2, 3, 2, 2, 3 };
 
     public SequencePlayer(MidiPlayer midiPlayer, Options options) {
         this.midiPlayer = midiPlayer;
@@ -28,11 +27,9 @@ public class SequencePlayer {
             notes[i] = note;
             note += INTERVALS_PENTATONIC[i % INTERVALS_PENTATONIC.length];
         }
-
-        this.ticks = options.ticks;
     }
 
-    public void playSequence(Sequence sequence)
+    public void playSequence(Sequence sequence, int tempo)
     {
         try {
             javax.sound.midi.Sequence midiSequence
@@ -43,7 +40,7 @@ public class SequencePlayer {
             programChangeMessage.setMessage(ShortMessage.PROGRAM_CHANGE, 90, 0);
             track.add(new MidiEvent(programChangeMessage , 0));
 
-            for (int tick = 0; tick < ticks; tick++)
+            for (int tick = 0; tick < sequence.getLength(); tick++)
             {
                 for (int note = 0; note < notes.length; note++)
                 {
@@ -60,17 +57,9 @@ public class SequencePlayer {
                 }
             }
 
-            midiPlayer.play(midiSequence, 240);
+            midiPlayer.play(midiSequence, tempo);
         } catch (InvalidMidiDataException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public int getNotes() {
-        return notes.length;
-    }
-
-    public int getTicks() {
-        return ticks;
     }
 }

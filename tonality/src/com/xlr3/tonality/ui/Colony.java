@@ -22,6 +22,7 @@ public class Colony {
     private int activeSequences;
     private final Options options;
     private final InputListener inputListener;
+    private int bacteriaKilled;
 
     public Colony(Options options, final SequencePlayer sequencePlayer) {
         this.options = options;
@@ -30,12 +31,13 @@ public class Colony {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 Bacterium bacterium = (Bacterium) event.getListenerActor();
-                sequencePlayer.playSequence(bacterium.getSequence());
+                sequencePlayer.playSequence(bacterium.getSequence().getNormalised(), Constants.TEMPO);
                 return true;
             }
         };
 
         this.activeSequences = 1;
+        this.bacteriaKilled = 0;
     }
 
     public Actor getActor() {
@@ -63,11 +65,17 @@ public class Colony {
         for (Actor actor : group.getChildren()) {
             Bacterium bacterium = (Bacterium)actor;
 
-            if (bacterium.getAge() > random.nextFloat() * options.maxAge)
+            if ((activeSequences == 1 && population == 1) || bacterium.getAge() > random.nextFloat() * options.maxAge)
             {
                 group.removeActor(bacterium);
-                group.addActor(createChild(bacterium));
-                group.addActor(createChild(bacterium));
+                group.addActor(createChild(bacterium, false));
+
+                if (activeSequences == 1 || options.mutationRate > random.nextFloat()) {
+                    group.addActor(createChild(bacterium, true));
+                    activeSequences++;
+                } else {
+                    group.addActor(createChild(bacterium, false));
+                }
 
                 pool.free(bacterium);
                 population++;
@@ -100,6 +108,7 @@ public class Colony {
                 group.removeActor(bacterium);
                 pool.free(bacterium);
                 population--;
+                bacteriaKilled++;
             }
         }
         children.end();
@@ -107,21 +116,23 @@ public class Colony {
         activeSequences -= matchedSequences.size();
     }
 
-    private Bacterium createChild(Bacterium parent) {
+    private Bacterium createChild(Bacterium parent, boolean mutate) {
         Bacterium child = pool.obtain();
-        Sequence newSequence;
-        if (options.mutationRate > random.nextFloat()) {
-            newSequence = parent.getSequence().createMutation();
-            activeSequences++;
-        } else {
-            newSequence = parent.getSequence();
-        }
 
-        child.initialise(parent.getX(), parent.getY(), newSequence, inputListener);
+        child.initialise(
+                parent.getX(),
+                parent.getY(),
+                mutate ? parent.getSequence().createMutation() : parent.getSequence(),
+                inputListener);
+
         return child;
     }
 
     public int getActiveSequences() {
         return activeSequences;
+    }
+
+    public int getBacteriaKilled() {
+        return bacteriaKilled;
     }
 }
