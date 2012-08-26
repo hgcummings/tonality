@@ -38,7 +38,7 @@ public class ControlPanel implements Sequence {
 
     public boolean getActive(int note, int tick)
     {
-        return buttons[note][tick].isChecked();
+        return noteButtons[note][tick].isChecked();
     }
 
     public Actor getActor()
@@ -46,7 +46,12 @@ public class ControlPanel implements Sequence {
         return table;
     }
 
-    private Button[][] buttons;
+    public void activate() {
+        dispatchButton.setDisabled(false);
+    }
+
+    private Button[][] noteButtons;
+    private Button dispatchButton;
 
     private Table buildTable(int notes, int ticks) {
         Table table = new Table();
@@ -57,29 +62,31 @@ public class ControlPanel implements Sequence {
         table.setWidth(Constants.GAME_VIEWPORT_WIDTH /2);
         table.setHeight(Constants.GAME_VIEWPORT_HEIGHT);
 
-        buttons = new Button[notes][ticks];
+        noteButtons = new Button[notes][ticks];
 
         for (int note = 0; note < notes; note++)
         {
             for (int tick = 0; tick < ticks; tick++)
             {
-                buttons[notes - note - 1][tick] = new Button(skin, "toggle");
-                table.add(buttons[notes - note - 1][tick]).uniform().fill().expand();
+                noteButtons[notes - note - 1][tick] = new Button(skin, "toggle");
+                table.add(noteButtons[notes - note - 1][tick]).uniform().fill().expand();
             }
             table.row().expandX();
         }
 
         buildButton(table, ticks, "Test", EventType.TEST);
-        buildButton(table, ticks, "Dispatch", EventType.DISPATCH);
+        dispatchButton = buildButton(table, ticks, "Dispatch", EventType.DISPATCH);
+        dispatchButton.setDisabled(true);
 
         return table;
     }
 
-    private void buildButton(Table table, int colSpan, String name, EventType eventType) {
+    private Button buildButton(Table table, int colSpan, String name, EventType eventType) {
         table.row().expandX();
-        TextButton testButton = new TextButton(name, skin);
-        testButton.addListener(new ButtonListener(eventType));
-        table.add(testButton).colspan(colSpan).fillX();
+        TextButton button = new TextButton(name, skin);
+        button.addListener(new ButtonListener(eventType));
+        table.add(button).colspan(colSpan).fillX();
+        return button;
     }
 
     private class ButtonListener extends InputListener
@@ -99,6 +106,9 @@ public class ControlPanel implements Sequence {
                 int pointer,
                 int button )
         {
+            if (((Button)event.getListenerActor()).isDisabled()) {
+                return false;
+            }
             listener.raise(eventType);
             return true;
         }

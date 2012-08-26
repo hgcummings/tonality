@@ -6,10 +6,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.ReflectionPool;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.xlr3.tonality.Constants;
 import com.xlr3.tonality.Options;
 import com.xlr3.tonality.service.SequencePlayer;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Colony {
@@ -17,6 +19,7 @@ public class Colony {
     private Group group;
     private Random random = new Random();
     private int population;
+    private int activeSequences;
     private final Options options;
     private final InputListener inputListener;
 
@@ -31,6 +34,8 @@ public class Colony {
                 return true;
             }
         };
+
+        this.activeSequences = 1;
     }
 
     public Actor getActor() {
@@ -74,12 +79,49 @@ public class Colony {
         return population;
     }
 
+    public void dispatchSequence(Sequence sequence) {
+        ArrayList<Sequence> matchedSequences = new ArrayList<Sequence>();
+
+        SnapshotArray<Actor> children = group.getChildren();
+        Actor[] actors = children.begin();
+        for (int i = 0, n = children.size; i < n; i++) {
+            Bacterium bacterium = (Bacterium)actors[i];
+
+            boolean match = false;
+
+            if (matchedSequences.contains(bacterium.getSequence())) {
+                match = true;
+            } else if (bacterium.getSequence().matches(sequence)) {
+                match = true;
+                matchedSequences.add(bacterium.getSequence());
+            }
+
+            if (match) {
+                group.removeActor(bacterium);
+                pool.free(bacterium);
+                population--;
+            }
+        }
+        children.end();
+
+        activeSequences -= matchedSequences.size();
+    }
+
     private Bacterium createChild(Bacterium parent) {
         Bacterium child = pool.obtain();
-        Sequence newSequence = (options.mutationRate > random.nextFloat())
-                                    ? parent.getSequence().createMutation()
-                                    : parent.getSequence().createClone();
+        Sequence newSequence;
+        if (options.mutationRate > random.nextFloat()) {
+            newSequence = parent.getSequence().createMutation();
+            activeSequences++;
+        } else {
+            newSequence = parent.getSequence();
+        }
+
         child.initialise(parent.getX(), parent.getY(), newSequence, inputListener);
         return child;
+    }
+
+    public int getActiveSequences() {
+        return activeSequences;
     }
 }

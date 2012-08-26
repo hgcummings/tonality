@@ -15,11 +15,6 @@ public class Sequence implements com.xlr3.tonality.service.Sequence {
         this.ticks = ticks;
     }
 
-    /*public Sequence(boolean[][] notes) {
-        this.notes = notes.clone();
-        this.ticks = notes[0].length;
-    }*/
-
     @Override
     public boolean getActive(int note, int tick) {
         return notes[note][tick];
@@ -41,7 +36,7 @@ public class Sequence implements com.xlr3.tonality.service.Sequence {
         return true;
     }
 
-    private int getStart() {
+    public int getStart() {
         for (int tick = 0; tick < ticks; tick++) {
             if (tickHasNote(tick)) {
                 return tick;
@@ -51,7 +46,7 @@ public class Sequence implements com.xlr3.tonality.service.Sequence {
     }
 
     private int getEnd() {
-        for (int tick = ticks - 1; tick > 0; tick--) {
+        for (int tick = ticks - 1; tick >= 0; tick--) {
             if (tickHasNote(tick)) {
                 return tick;
             }
@@ -59,7 +54,7 @@ public class Sequence implements com.xlr3.tonality.service.Sequence {
         return -1;
     }
 
-    private int getLength() {
+    public int getLength() {
         return getEnd() - getStart() + 1;
     }
 
