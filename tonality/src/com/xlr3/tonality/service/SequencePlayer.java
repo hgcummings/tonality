@@ -1,5 +1,6 @@
 package com.xlr3.tonality.service;
 
+import com.xlr3.tonality.Options;
 import com.xlr3.tonality.platform.MidiPlayer;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -7,15 +8,28 @@ import javax.sound.midi.MidiEvent;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
+/*
+ * Plays a Tonality Sequence as a MIDI Sequence
+ * Note: This class is probably desktop-specific (since it relies on Sun Java runtime libraries)
+ */
 public class SequencePlayer {
     private final int[] notes;
     private final int ticks;
     private final MidiPlayer midiPlayer;
 
-    public SequencePlayer(MidiPlayer midiPlayer) {
+    private final int[] INTERVALS_PENTATONIC = new int[] { 2, 3, 2, 2, 3 };
+
+    public SequencePlayer(MidiPlayer midiPlayer, Options options) {
         this.midiPlayer = midiPlayer;
-        this.notes = new int[]{60, 62, 65, 67, 69};
-        this.ticks = 5;
+        this.notes = new int[options.notes];
+
+        int note = 60;
+        for (int i = 0; i<options.notes; i++) {
+            notes[i] = note;
+            note += INTERVALS_PENTATONIC[i % INTERVALS_PENTATONIC.length];
+        }
+
+        this.ticks = options.ticks;
     }
 
     public void playSequence(Sequence sequence)

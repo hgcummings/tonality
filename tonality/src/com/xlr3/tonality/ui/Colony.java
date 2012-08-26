@@ -2,9 +2,13 @@ package com.xlr3.tonality.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.ReflectionPool;
 import com.xlr3.tonality.Constants;
+import com.xlr3.tonality.Options;
+import com.xlr3.tonality.service.SequencePlayer;
 
 import java.util.Random;
 
@@ -13,6 +17,21 @@ public class Colony {
     private Group group;
     private Random random = new Random();
     private int population;
+    private final Options options;
+    private final InputListener inputListener;
+
+    public Colony(Options options, final SequencePlayer sequencePlayer) {
+        this.options = options;
+
+        this.inputListener = new InputListener() {
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                Bacterium bacterium = (Bacterium) event.getListenerActor();
+                sequencePlayer.playSequence(bacterium.getSequence());
+                return true;
+            }
+        };
+    }
 
     public Actor getActor() {
         group = new Group();
@@ -24,7 +43,11 @@ public class Colony {
         group.setHeight(Constants.GAME_VIEWPORT_HEIGHT);
 
         Bacterium bacterium = pool.obtain();
-        bacterium.initialise(Constants.GAME_VIEWPORT_WIDTH / 4, Constants.GAME_VIEWPORT_HEIGHT / 2);
+        bacterium.initialise(
+                Constants.GAME_VIEWPORT_WIDTH / 4,
+                Constants.GAME_VIEWPORT_HEIGHT / 2,
+                Sequence.create(options),
+                inputListener);
         group.addActor(bacterium);
         population = 1;
 
@@ -35,7 +58,7 @@ public class Colony {
         for (Actor actor : group.getChildren()) {
             Bacterium bacterium = (Bacterium)actor;
 
-            if (bacterium.getAge() > random.nextFloat() * 1000)
+            if (bacterium.getAge() > random.nextFloat() * options.maxAge)
             {
                 group.removeActor(bacterium);
                 group.addActor(createChild(bacterium));
@@ -53,7 +76,10 @@ public class Colony {
 
     private Bacterium createChild(Bacterium parent) {
         Bacterium child = pool.obtain();
-        child.initialise(parent.getX(), parent.getY());
+        Sequence newSequence = (options.mutationRate > random.nextFloat())
+                                    ? parent.getSequence().createMutation()
+                                    : parent.getSequence().createClone();
+        child.initialise(parent.getX(), parent.getY(), newSequence, inputListener);
         return child;
     }
 }

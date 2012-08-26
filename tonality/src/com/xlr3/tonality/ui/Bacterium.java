@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.xlr3.tonality.Constants;
@@ -17,6 +18,7 @@ public class Bacterium extends Image {
     private static final int MAX_EXTENT_X = (Constants.GAME_VIEWPORT_WIDTH / 2) - SIZE;
     private static final int MAX_EXTENT_Y = (Constants.GAME_VIEWPORT_HEIGHT) - SIZE;
     private float age;
+    private Sequence sequence;
 
     public Bacterium() {
         Texture texture = new Texture(Gdx.files.internal("sprite\\bacterium.png"));
@@ -30,11 +32,13 @@ public class Bacterium extends Image {
         this.velocity = new Vector2();
     }
 
-    public void initialise(float x, float y) {
+    public void initialise(float x, float y, Sequence sequence, InputListener inputListener) {
         this.velocity.x = random.nextFloat() - 0.5f;
         this.velocity.y = random.nextFloat() - 0.5f;
         this.setPosition(x, y);
         this.age = 0;
+        this.sequence = sequence;
+        this.addListener(inputListener);
     }
 
     @Override
@@ -71,5 +75,9 @@ public class Bacterium extends Image {
     public float getAge()
     {
         return age;
+    }
+
+    public Sequence getSequence() {
+        return sequence;
     }
 }
