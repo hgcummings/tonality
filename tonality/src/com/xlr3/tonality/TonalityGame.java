@@ -20,7 +20,7 @@ public class TonalityGame extends Game {
 
 	@Override
 	public void create() {
-		setScreen(new IntroScreen(new IntroScreen.ExitListener() {
+        setScreen(new IntroScreen(new IntroScreen.ExitListener() {
             @Override public void exit() { launchMainScreen(); }
         }));
 	}

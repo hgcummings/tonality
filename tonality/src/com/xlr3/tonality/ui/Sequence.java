@@ -56,7 +56,8 @@ public class Sequence implements com.xlr3.tonality.service.Sequence {
 
     @Override
     public int getLength() {
-        return getEnd() - getStart() + 1;
+        int start = getStart();
+        return start == -1 ? 0 : getEnd() - getStart() + 1;
     }
 
     private boolean tickHasNote(int tick) {

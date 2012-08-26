@@ -24,7 +24,7 @@ public class IntroScreen extends AbstractScreen {
         table.setHeight(Constants.GAME_VIEWPORT_HEIGHT);
 
         table.row().padBottom(50);
-        table.add("Tonality: Evolution").colspan(3);
+        table.add("t o n a l i t y | evolution").colspan(3);
 
         table.row();
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("sprite/intro.atlas"));

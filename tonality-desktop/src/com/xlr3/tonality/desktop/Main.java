@@ -13,7 +13,7 @@ public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 
-        cfg.title = "Tonality";
+        cfg.title = "Tonality: evolution";
 
         try {
             String className = Main.class.getSimpleName() + ".class";

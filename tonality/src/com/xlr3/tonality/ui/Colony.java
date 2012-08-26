@@ -89,19 +89,25 @@ public class Colony {
 
     public void dispatchSequence(Sequence sequence) {
         ArrayList<Sequence> matchedSequences = new ArrayList<Sequence>();
+        ArrayList<Sequence> unmatchedSequences = new ArrayList<Sequence>(activeSequences);
 
         SnapshotArray<Actor> children = group.getChildren();
         Actor[] actors = children.begin();
         for (int i = 0, n = children.size; i < n; i++) {
             Bacterium bacterium = (Bacterium)actors[i];
 
-            boolean match = false;
+            boolean match;
 
-            if (matchedSequences.contains(bacterium.getSequence())) {
+            if (unmatchedSequences.contains(bacterium.getSequence())) {
+                match = false;
+            } else if (matchedSequences.contains(bacterium.getSequence())) {
                 match = true;
             } else if (bacterium.getSequence().matches(sequence)) {
                 match = true;
                 matchedSequences.add(bacterium.getSequence());
+            } else {
+                match = false;
+                unmatchedSequences.add(bacterium.getSequence());
             }
 
             if (match) {

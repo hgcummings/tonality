@@ -12,13 +12,12 @@ import com.xlr3.tonality.service.Sequence;
 
 public class ControlPanel implements Sequence {
     private final Skin skin;
-    private final Table table;
     private final GenericListener<EventType> listener;
+    private final int notes;
     private final int ticks;
 
     public static enum EventType {
-        TEST,
-        DISPATCH
+        GO
     }
 
     public ControlPanel(
@@ -30,8 +29,8 @@ public class ControlPanel implements Sequence {
     {
         this.skin = skin;
         this.listener = listener;
+        this.notes = notes;
         this.ticks = ticks;
-        this.table = buildTable(notes, ticks);
     }
 
     public boolean getActive(int note, int tick)
@@ -46,7 +45,7 @@ public class ControlPanel implements Sequence {
 
     public Actor getActor()
     {
-        return table;
+        return buildTable(notes, ticks);
     }
 
     private Button[][] noteButtons;
@@ -72,17 +71,16 @@ public class ControlPanel implements Sequence {
             table.row().expandX();
         }
 
-        buildButton(table, ticks, "Test", EventType.TEST);
-        buildButton(table, ticks, "Dispatch", EventType.DISPATCH);
+        table.row().expandX();
+        buildButton(table, "Go!", EventType.GO);
 
         return table;
     }
 
-    private Button buildButton(Table table, int colSpan, String name, EventType eventType) {
-        table.row().expandX();
+    private Button buildButton(Table table, String name, EventType eventType) {
         TextButton button = new TextButton(name, skin);
         button.addListener(new ButtonListener<EventType>(eventType, this.listener));
-        table.add(button).colspan(colSpan).fillX();
+        table.add(button).colspan(ticks).fillX().height(Constants.GAME_VIEWPORT_HEIGHT / (notes + 1));
         return button;
     }
 

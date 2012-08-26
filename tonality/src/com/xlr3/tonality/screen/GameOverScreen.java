@@ -1,10 +1,8 @@
 package com.xlr3.tonality.screen;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.xlr3.tonality.Constants;
 import com.xlr3.tonality.Score;
 
@@ -19,7 +17,7 @@ public class GameOverScreen extends AbstractScreen {
         table.setWidth(Constants.GAME_VIEWPORT_WIDTH);
         table.setHeight(Constants.GAME_VIEWPORT_HEIGHT);
 
-        table.add(TableUtils.createLabel("GAME OVER!", getSkin())).colspan(2);
+        table.add(TableUtils.createLabel("GAME OVER!", getSkin())).colspan(2).height(50);
         table.row();
 
         table.add(TableUtils.createLabel(score.toString(), getSkin())).colspan(2).pad(50);

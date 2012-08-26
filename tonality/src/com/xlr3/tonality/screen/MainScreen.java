@@ -39,23 +39,17 @@ public class MainScreen extends AbstractScreen implements GenericListener<Contro
         stage.addActor(sequencesLabel);
     }
 
-    public void testSequence() {
-        sequencePlayer.playSequence(controlPanel, Constants.TEMPO);
-    }
-
-    public void dispatchSequence() {
+    public void launchSequence() {
         Sequence sequence = Sequence.createClone(options.notes, options.ticks, controlPanel);
+        sequencePlayer.playSequence(sequence.getNormalised(), Constants.TEMPO);
         colony.dispatchSequence(sequence);
     }
 
     @Override
     public void fire(ControlPanel.EventType eventType) {
         switch (eventType) {
-            case TEST:
-                testSequence();
-                break;
-            case DISPATCH:
-                dispatchSequence();
+            case GO:
+                launchSequence();
                 break;
             default:
                 Gdx.app.log(TonalityGame.LOG, "Unrecognised control panel event type");
