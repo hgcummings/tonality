@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.xlr3.tonality.Constants;
 
 /**
@@ -16,74 +15,64 @@ import com.xlr3.tonality.Constants;
  */
 public abstract class AbstractScreen
         implements
-        Screen
-{
+        Screen {
     protected final BitmapFont font;
     protected final SpriteBatch batch;
     protected final Stage stage;
 
     private Skin skin;
 
-    public AbstractScreen()
-    {
+    public AbstractScreen() {
         this.font = new BitmapFont();
         this.batch = new SpriteBatch();
         this.stage = new Stage(Constants.GAME_VIEWPORT_WIDTH, Constants.GAME_VIEWPORT_HEIGHT, true);
     }
 
     @Override
-    public void show()
-    {
+    public void show() {
     }
 
     @Override
     public void resize(
             int width,
-            int height )
-    {
+            int height) {
         // resize the stage
-        stage.setViewport( width, height, true );
+        stage.setViewport(width, height, true);
         Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void render(
-            float delta )
-    {
+            float delta) {
         // the following code clears the screen with the given RGB color (black)
-        Gdx.gl.glClearColor( 0f, 0f, 0f, 1f );
-        Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(delta);
         stage.draw();
     }
 
     @Override
-    public void hide()
-    {
+    public void hide() {
     }
 
     @Override
-    public void pause()
-    {
+    public void pause() {
     }
 
     @Override
-    public void resume()
-    {
+    public void resume() {
     }
 
     @Override
-    public void dispose()
-    {
+    public void dispose() {
         font.dispose();
         batch.dispose();
         skin.dispose();
     }
 
-    protected Skin getSkin()
-    {
-        if( skin == null ) {
+    protected Skin getSkin() {
+        if (skin == null) {
             FileHandle skinFile = Gdx.files.internal("skin/uiskin.json");
             skin = new Skin(skinFile);
         }

@@ -72,8 +72,7 @@ public class Bacterium extends Image {
         age += delta;
     }
 
-    public float getAge()
-    {
+    public float getAge() {
         return age;
     }
 

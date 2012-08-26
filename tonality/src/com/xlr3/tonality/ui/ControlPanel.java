@@ -25,16 +25,14 @@ public class ControlPanel implements Sequence {
             int notes,
             int ticks,
             GenericListener<EventType> listener
-        )
-    {
+    ) {
         this.skin = skin;
         this.listener = listener;
         this.notes = notes;
         this.ticks = ticks;
     }
 
-    public boolean getActive(int note, int tick)
-    {
+    public boolean getActive(int note, int tick) {
         return noteButtons[note][tick].isChecked();
     }
 
@@ -43,8 +41,7 @@ public class ControlPanel implements Sequence {
         return ticks;
     }
 
-    public Actor getActor()
-    {
+    public Actor getActor() {
         return buildTable(notes, ticks);
     }
 
@@ -56,15 +53,13 @@ public class ControlPanel implements Sequence {
         table.setX(Constants.GAME_VIEWPORT_WIDTH / 2);
         table.setY(0);
 
-        table.setWidth(Constants.GAME_VIEWPORT_WIDTH /2);
+        table.setWidth(Constants.GAME_VIEWPORT_WIDTH / 2);
         table.setHeight(Constants.GAME_VIEWPORT_HEIGHT);
 
         noteButtons = new Button[notes][ticks];
 
-        for (int note = 0; note < notes; note++)
-        {
-            for (int tick = 0; tick < ticks; tick++)
-            {
+        for (int note = 0; note < notes; note++) {
+            for (int tick = 0; tick < ticks; tick++) {
                 noteButtons[notes - note - 1][tick] = new Button(skin, "toggle");
                 table.add(noteButtons[notes - note - 1][tick]).uniform().fill().expand();
             }

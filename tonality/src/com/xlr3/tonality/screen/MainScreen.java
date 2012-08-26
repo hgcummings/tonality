@@ -5,9 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.xlr3.tonality.Constants;
 import com.xlr3.tonality.Options;
 import com.xlr3.tonality.Score;
+import com.xlr3.tonality.TonalityGame;
 import com.xlr3.tonality.platform.MidiPlayer;
 import com.xlr3.tonality.service.SequencePlayer;
-import com.xlr3.tonality.TonalityGame;
 import com.xlr3.tonality.ui.Colony;
 import com.xlr3.tonality.ui.ControlPanel;
 import com.xlr3.tonality.ui.Sequence;
@@ -41,8 +41,9 @@ public class MainScreen extends AbstractScreen implements GenericListener<Contro
 
     public void launchSequence() {
         Sequence sequence = Sequence.createClone(options.notes, options.ticks, controlPanel);
-        sequencePlayer.playSequence(sequence.getNormalised(), Constants.TEMPO);
-        colony.dispatchSequence(sequence);
+        if (!colony.dispatchSequence(sequence)) {
+            sequencePlayer.playSequence(sequence.getNormalised(), Constants.TEMPO);
+        }
     }
 
     @Override
@@ -60,7 +61,7 @@ public class MainScreen extends AbstractScreen implements GenericListener<Contro
     @Override
     public void render(float delta) {
         totalTime += delta;
-        colony.updateState();
+        colony.updateState(totalTime);
         if (colony.getPopulation() > 1000 || colony.getPopulation() == 0) {
             exitListener.fire(new Score(totalTime, colony.getBacteriaKilled()));
         }

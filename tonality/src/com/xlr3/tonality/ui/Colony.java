@@ -29,7 +29,7 @@ public class Colony {
 
         this.inputListener = new InputListener() {
             @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Bacterium bacterium = (Bacterium) event.getListenerActor();
                 sequencePlayer.playSequence(bacterium.getSequence().getNormalised(), Constants.TEMPO);
                 return true;
@@ -46,7 +46,7 @@ public class Colony {
         group.setX(0);
         group.setY(0);
 
-        group.setWidth(Constants.GAME_VIEWPORT_WIDTH /2);
+        group.setWidth(Constants.GAME_VIEWPORT_WIDTH / 2);
         group.setHeight(Constants.GAME_VIEWPORT_HEIGHT);
 
         Bacterium bacterium = pool.obtain();
@@ -61,12 +61,11 @@ public class Colony {
         return group;
     }
 
-    public void updateState() {
+    public void updateState(float totalTime) {
         for (Actor actor : group.getChildren()) {
-            Bacterium bacterium = (Bacterium)actor;
+            Bacterium bacterium = (Bacterium) actor;
 
-            if ((activeSequences == 1 && population == 1) || bacterium.getAge() > random.nextFloat() * options.maxAge)
-            {
+            if ((activeSequences == 1 && (population == 1 || totalTime < options.startPhase)) || bacterium.getAge() > random.nextFloat() * options.maxAge) {
                 group.removeActor(bacterium);
                 group.addActor(createChild(bacterium, false));
 
@@ -87,14 +86,14 @@ public class Colony {
         return population;
     }
 
-    public void dispatchSequence(Sequence sequence) {
+    public boolean dispatchSequence(Sequence sequence) {
         ArrayList<Sequence> matchedSequences = new ArrayList<Sequence>();
         ArrayList<Sequence> unmatchedSequences = new ArrayList<Sequence>(activeSequences);
 
         SnapshotArray<Actor> children = group.getChildren();
         Actor[] actors = children.begin();
         for (int i = 0, n = children.size; i < n; i++) {
-            Bacterium bacterium = (Bacterium)actors[i];
+            Bacterium bacterium = (Bacterium) actors[i];
 
             boolean match;
 
@@ -120,6 +119,7 @@ public class Colony {
         children.end();
 
         activeSequences -= matchedSequences.size();
+        return matchedSequences.size() != 0;
     }
 
     private Bacterium createChild(Bacterium parent, boolean mutate) {

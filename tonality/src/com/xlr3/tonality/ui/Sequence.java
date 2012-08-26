@@ -89,8 +89,24 @@ public class Sequence implements com.xlr3.tonality.service.Sequence {
 
     public Sequence createMutation() {
         Sequence newSequence = this.createClone();
+        // Half the mutations 'move' a note, others add a new one
+        if (random.nextFloat() > 0.5f) {
+            newSequence.removeNote();
+        }
         newSequence.addNote();
         return newSequence;
+    }
+
+    private void removeNote() {
+        int note = random.nextInt(notes.length);
+        int tick = random.nextInt(ticks);
+
+        while (!notes[note][tick]) {
+            note = random.nextInt(notes.length);
+            tick = random.nextInt(ticks);
+        }
+
+        notes[note][tick] = false;
     }
 
     public Sequence createClone() {
@@ -125,6 +141,7 @@ public class Sequence implements com.xlr3.tonality.service.Sequence {
         float max = 0f;
         int chosenTick = -1;
 
+        // Favour melodic complexity before harmonic
         for (int tick = 0; tick < ticks; tick++) {
             float weighting = random.nextFloat() * (ticks - tickNoteCount(tick));
             if (weighting > max) {

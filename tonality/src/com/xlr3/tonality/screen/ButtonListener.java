@@ -4,13 +4,11 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 
-public class ButtonListener<T> extends InputListener
-{
+public class ButtonListener<T> extends InputListener {
     private T payload;
     private GenericListener<T> listener;
 
-    public ButtonListener(T payload, GenericListener<T> listener)
-    {
+    public ButtonListener(T payload, GenericListener<T> listener) {
         this.payload = payload;
         this.listener = listener;
     }
@@ -21,12 +19,12 @@ public class ButtonListener<T> extends InputListener
             float x,
             float y,
             int pointer,
-            int button )
-    {
-        if (((Button)event.getListenerActor()).isDisabled()) {
-            return false;
-        }
+            int button) {
+        return !((Button) event.getListenerActor()).isDisabled();
+    }
+
+    @Override
+    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
         listener.fire(payload);
-        return true;
     }
 }

@@ -5,10 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.xlr3.tonality.Constants;
 
@@ -24,6 +22,7 @@ public class IntroScreen extends AbstractScreen {
         table.setHeight(Constants.GAME_VIEWPORT_HEIGHT);
 
         table.row().padBottom(50);
+
         table.add("t o n a l i t y | evolution").colspan(3);
 
         table.row();

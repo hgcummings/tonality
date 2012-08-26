@@ -9,6 +9,7 @@ import javax.sound.midi.Sequence;
  */
 public interface MidiPlayer {
     public void play(Sequence sequence, int tempo);
+
     public void dispose();
 }
 
