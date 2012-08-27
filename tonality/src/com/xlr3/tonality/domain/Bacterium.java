@@ -6,7 +6,7 @@ import com.xlr3.tonality.Globals;
 
 public class Bacterium extends BacteriumBase {
     private final Vector2 velocity;
-    private Sequence sequence;
+    private SequenceImpl sequence;
     public static final String FIRST = "First";
     private float splitAge;
 
@@ -14,7 +14,7 @@ public class Bacterium extends BacteriumBase {
         this.velocity = new Vector2();
     }
 
-    public void initialise(float x, float y, Sequence sequence, float maxAge, InputListener inputListener) {
+    public void initialise(float x, float y, SequenceImpl sequence, float maxAge, InputListener inputListener) {
         super.initialise(x, y);
         this.velocity.x = Globals.RANDOM.nextFloat() - 0.5f;
         this.velocity.y = Globals.RANDOM.nextFloat() - 0.5f;
@@ -39,7 +39,7 @@ public class Bacterium extends BacteriumBase {
         }
     }
 
-    public Sequence getSequence() {
+    public SequenceImpl getSequence() {
         return sequence;
     }
 

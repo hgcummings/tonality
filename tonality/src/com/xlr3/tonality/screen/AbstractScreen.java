@@ -16,15 +16,11 @@ import com.xlr3.tonality.Globals;
 public abstract class AbstractScreen
         implements
         Screen {
-    protected final BitmapFont font;
-    protected final SpriteBatch batch;
     protected final Stage stage;
 
     private Skin skin;
 
     public AbstractScreen() {
-        this.font = new BitmapFont();
-        this.batch = new SpriteBatch();
         this.stage = new Stage(Globals.GAME_VIEWPORT_WIDTH, Globals.GAME_VIEWPORT_HEIGHT, true);
     }
 
@@ -66,8 +62,6 @@ public abstract class AbstractScreen
 
     @Override
     public void dispose() {
-        font.dispose();
-        batch.dispose();
         skin.dispose();
     }
 

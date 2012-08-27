@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.xlr3.tonality.Globals;
 import com.xlr3.tonality.screen.ButtonListener;
 import com.xlr3.tonality.screen.GenericListener;
-import com.xlr3.tonality.service.Sequence;
 
 public class ControlPanel implements Sequence {
     private final Skin skin;

@@ -14,7 +14,6 @@ import com.xlr3.tonality.Globals;
 import com.xlr3.tonality.Options;
 import com.xlr3.tonality.TonalityGame;
 
-import java.io.InvalidClassException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -25,8 +24,8 @@ public class OptionsScreen extends AbstractScreen {
     private Label helpTextLabel;
 
     @SuppressWarnings("unchecked")
-    private static OrderedMap<String, OrderedMap> optionsText
-        = (OrderedMap<String, OrderedMap>) new JsonReader().parse(Gdx.files.internal("text/options.json"));
+    private static OrderedMap<String, OrderedMap<Object, Object>> optionsText
+        = (OrderedMap<String, OrderedMap<Object, Object>>) new JsonReader().parse(Gdx.files.internal("text/options.json"));
 
     public OptionsScreen(Options currentOptions, final GenericListener<Options> exitListener) {
         final Table table = new Table(getSkin());
@@ -43,7 +42,7 @@ public class OptionsScreen extends AbstractScreen {
         table.row();
         table.add(helpTextLabel).colspan(10).height(120).expandX();
 
-        for (ObjectMap.Entry<String, OrderedMap> details : optionsText.entries()) {
+        for (ObjectMap.Entry<String, OrderedMap<Object, Object>> details : optionsText.entries()) {
             addInputRow(table, details);
         }
 
@@ -106,7 +105,8 @@ public class OptionsScreen extends AbstractScreen {
             getValue("mutationRate"),
             Math.round(getValue("maxAge")),
             Math.round(getValue("startPhase")),
-            null
+            Options.DEFAULT.intervals,
+            Options.DEFAULT.rootNote
         );
     }
 
@@ -115,8 +115,7 @@ public class OptionsScreen extends AbstractScreen {
         return slider.getValue();
     }
 
-    @SuppressWarnings("unchecked")
-    private void addInputRow(Table table, ObjectMap.Entry<String, OrderedMap> optionDetails) {
+    private void addInputRow(Table table, ObjectMap.Entry<String, OrderedMap<Object, Object>> optionDetails) {
         table.row();
         Label label = new Label((String) optionDetails.value.get("name"), getSkin());
         final String helpText = (String) optionDetails.value.get("description");

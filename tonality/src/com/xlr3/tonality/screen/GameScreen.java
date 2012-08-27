@@ -7,9 +7,9 @@ import com.xlr3.tonality.Options;
 import com.xlr3.tonality.TonalityGame;
 import com.xlr3.tonality.domain.Colony;
 import com.xlr3.tonality.domain.ControlPanel;
-import com.xlr3.tonality.domain.Sequence;
+import com.xlr3.tonality.domain.SequenceImpl;
+import com.xlr3.tonality.domain.SequencePlayer;
 import com.xlr3.tonality.platform.MidiPlayer;
-import com.xlr3.tonality.service.SequencePlayer;
 
 public abstract class GameScreen<T> extends AbstractScreen implements GenericListener<ControlPanel.EventType> {
     protected final Colony colony;
@@ -36,7 +36,7 @@ public abstract class GameScreen<T> extends AbstractScreen implements GenericLis
     }
 
     protected void launchSequence() {
-        Sequence sequence = Sequence.createClone(options.notes, options.ticks, controlPanel);
+        SequenceImpl sequence = SequenceImpl.createClone(options.notes, options.ticks, controlPanel);
         int hits;
         if (colony.initialised() && ((hits = colony.dispatchSequence(sequence)) != 0)) {
             Globals.SOUND_HIT.play(hits / 100f);

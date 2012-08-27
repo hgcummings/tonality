@@ -1,6 +1,5 @@
 package com.xlr3.tonality.domain;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -10,8 +9,6 @@ import com.badlogic.gdx.utils.ReflectionPool;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.xlr3.tonality.Globals;
 import com.xlr3.tonality.Options;
-import com.xlr3.tonality.TonalityGame;
-import com.xlr3.tonality.service.SequencePlayer;
 
 import java.util.ArrayList;
 
@@ -53,7 +50,7 @@ public class Colony {
         bacterium.initialise(
                 Globals.GAME_VIEWPORT_WIDTH / 4,
                 Globals.GAME_VIEWPORT_HEIGHT / 2,
-                Sequence.create(options),
+                SequenceImpl.create(options),
                 options.maxAge,
                 inputListener);
         bacterium.setName(Bacterium.FIRST);
@@ -103,11 +100,11 @@ public class Colony {
         return population;
     }
 
-    public int dispatchSequence(Sequence sequence) {
+    public int dispatchSequence(SequenceImpl sequence) {
         int hits = 0;
 
-        ArrayList<Sequence> matchedSequences = new ArrayList<Sequence>();
-        ArrayList<Sequence> unmatchedSequences = new ArrayList<Sequence>(activeSequences);
+        ArrayList<SequenceImpl> matchedSequences = new ArrayList<SequenceImpl>();
+        ArrayList<SequenceImpl> unmatchedSequences = new ArrayList<SequenceImpl>(activeSequences);
 
         SnapshotArray<Actor> children = liveGroup.getChildren();
         Actor[] actors = children.begin();

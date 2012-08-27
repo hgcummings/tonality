@@ -4,3 +4,5 @@
 **/bin/**
 tonality-desktop/assets/**
 **/gen/**
+tonality-html/war/**
+tonality-html/gwt-unitCache/**
