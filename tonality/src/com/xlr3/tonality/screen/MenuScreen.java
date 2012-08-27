@@ -5,14 +5,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.xlr3.tonality.Globals;
 
-public class IntroScreen extends AbstractScreen {
+public class MenuScreen extends AbstractScreen {
     public enum ButtonType {
         TUTORIAL,
         GAME,
         OPTIONS
     }
 
-    public IntroScreen(GenericListener<ButtonType> listener) {
+    public MenuScreen(GenericListener<ButtonType> listener) {
         Table table = new Table(getSkin());
 
         table.setWidth(Globals.GAME_VIEWPORT_WIDTH);
@@ -24,8 +24,7 @@ public class IntroScreen extends AbstractScreen {
 
         addButton(table, listener, "Take the two-minute tutorial", ButtonType.TUTORIAL);
         addButton(table, listener, "Start playing now", ButtonType.GAME);
-        Button optionsButton = addButton(table, listener, "Tweak the difficulty level", ButtonType.OPTIONS);
-        optionsButton.setDisabled(true);
+        addButton(table, listener, "Tweak the difficulty level", ButtonType.OPTIONS);
 
         stage.addActor(table);
     }

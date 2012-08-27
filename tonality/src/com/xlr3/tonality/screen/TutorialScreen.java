@@ -18,16 +18,16 @@ import com.xlr3.tonality.platform.MidiPlayer;
 
 public class TutorialScreen extends GameScreen<Boolean> {
     private Label tutorialLabel;
-    OrderedMap<String, String> tutorialText;
     private String currentText;
     private Table tutorialTable;
 
     @SuppressWarnings("unchecked")
+    private static OrderedMap<String, String> tutorialText
+            = (OrderedMap<String, String>) new JsonReader().parse(Gdx.files.internal("text/tutorial.json"));
+
     public TutorialScreen(MidiPlayer midiPlayer, Options options, GenericListener<Boolean> exitListener) {
         super(midiPlayer, options.withSeed(3), exitListener);
         colony.setInhibitSplitting(true);
-
-        tutorialText = (OrderedMap<String, String>) new JsonReader().parse(Gdx.files.internal("text/tutorial.json"));
 
         for (int i = 0; (i < options.notes && i < options.ticks); i++) {
             controlPanel.setActive(i, i, true);

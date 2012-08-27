@@ -5,11 +5,11 @@ public class Options {
     public final int ticks;
     public final int seed;
     public final float mutationRate;
-    public final int maxAge;
+    public final float maxAge;
     public final int startPhase;
     public final Integer rootNote;
 
-    public Options(int notes, int ticks, int seed, float mutationRate, int maxAge, int startPhase, Integer rootNote) {
+    public Options(int notes, int ticks, int seed, float mutationRate, float maxAge, int startPhase, Integer rootNote) {
         this.notes = notes;
         this.ticks = ticks;
         this.seed = seed;
@@ -19,7 +19,7 @@ public class Options {
         this.rootNote = rootNote;
     }
 
-    public static final Options DEFAULT = new Options(6, 6, 1, 0.2f, 2000, 60, null);
+    public static final Options DEFAULT = new Options(6, 6, 1, 0.2f, 14.5f, 60, null);
 
     public Options withSeed(int seed) {
         return new Options(notes, ticks, seed, mutationRate, maxAge, startPhase, rootNote);

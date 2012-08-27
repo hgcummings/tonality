@@ -10,8 +10,6 @@ LibGDX, sfxr/bfxr, IntelliJ IDEA, Paint.NET
 
 ## TODO ##
 
-* Tutorial
-* Options
 * HTML5/WebGL port
 * Android port
 * 'Evolution' applied to options parameters (via HTML5/WebGL port)

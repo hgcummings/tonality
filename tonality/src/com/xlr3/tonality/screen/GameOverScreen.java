@@ -23,8 +23,8 @@ public class GameOverScreen extends AbstractScreen {
         table.add(TableUtils.createLabel(score.toString(), getSkin())).colspan(2).pad(50);
         table.row();
 
-        buildButton(table, "Play again", false);
-        buildButton(table, "Exit", true);
+        buildButton(table, "Play again", true);
+        buildButton(table, "Return to menu", false);
 
         stage.addActor(table);
     }

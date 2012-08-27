@@ -8,17 +8,19 @@ public class Bacterium extends BacteriumBase {
     private final Vector2 velocity;
     private Sequence sequence;
     public static final String FIRST = "First";
+    private float splitAge;
 
     public Bacterium() {
         this.velocity = new Vector2();
     }
 
-    public void initialise(float x, float y, Sequence sequence, InputListener inputListener) {
+    public void initialise(float x, float y, Sequence sequence, float maxAge, InputListener inputListener) {
         super.initialise(x, y);
         this.velocity.x = Globals.RANDOM.nextFloat() - 0.5f;
         this.velocity.y = Globals.RANDOM.nextFloat() - 0.5f;
         this.sequence = sequence;
         this.addListener(inputListener);
+        this.splitAge = Globals.RANDOM.nextFloat() * maxAge;
     }
 
     @Override
@@ -39,5 +41,9 @@ public class Bacterium extends BacteriumBase {
 
     public Sequence getSequence() {
         return sequence;
+    }
+
+    public float getSplitAge() {
+        return splitAge;
     }
 }

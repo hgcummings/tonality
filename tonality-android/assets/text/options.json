@@ -1,0 +1,53 @@
+{
+    notes: {
+		name: "Notes",
+		min: 1,
+		max: 16,
+		step: 1,
+		description:
+"Number of possible different notes (i.e. the number of rows in the grid)"
+	},
+	ticks: {
+		name: "Ticks",
+		min: 1,
+		max: 16,
+		step: 1,
+		description:
+"Maximum length of a sequence (i.e. the number of columns in the grid)"
+	},
+	seed: {
+		name: "Seed",
+		min: 1,
+		max: 16,
+		step: 1,
+		description:
+"Number of notes in the sequence of the first bacterium in the colony"
+	},
+	mutationRate: {
+		name: "Mutation rate",
+		min: 0.01,
+		max: 1.0,
+		step: 0.01,
+		description:
+"Chance of each new bacterium having a mutation from its parent"
+	},
+	maxAge: {
+		name: "Max age",
+		min: 0.5,
+		max: 30,
+		step: 0.25,
+		description:
+"Maximum age of a bacterium (in seconds) before it splits
+(mean age should be half of this value)"
+	},
+	startPhase: {
+		name: "Start phase",
+		min: 1,
+		max: 300,
+		step: 10,
+		description:
+"Period (in seconds) at the beginning of the game during which bacteria
+will always spawn immediately if there is only one active strain
+(player must survive past this phase to beat the game)."
+	}
+}

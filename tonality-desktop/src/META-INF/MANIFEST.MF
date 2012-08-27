@@ -1,3 +1,3 @@
-Manifest-Version: 0.1
+Manifest-Version: 0.3
 Main-Class: com.xlr3.tonality.desktop.Main
 

@@ -1,5 +1,6 @@
 package com.xlr3.tonality.domain;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.utils.ReflectionPool;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.xlr3.tonality.Globals;
 import com.xlr3.tonality.Options;
+import com.xlr3.tonality.TonalityGame;
 import com.xlr3.tonality.service.SequencePlayer;
 
 import java.util.ArrayList;
@@ -52,6 +54,7 @@ public class Colony {
                 Globals.GAME_VIEWPORT_WIDTH / 4,
                 Globals.GAME_VIEWPORT_HEIGHT / 2,
                 Sequence.create(options),
+                options.maxAge,
                 inputListener);
         bacterium.setName(Bacterium.FIRST);
         liveGroup.addActor(bacterium);
@@ -79,7 +82,7 @@ public class Colony {
             Bacterium bacterium = (Bacterium) actor;
 
             if ((activeSequences == 1 && (population == 1 || totalTime < options.startPhase))
-                    || bacterium.getAge() > Globals.RANDOM.nextFloat() * options.maxAge) {
+                    || bacterium.getAge() > bacterium.getSplitAge()) {
                 liveGroup.removeActor(bacterium);
                 liveGroup.addActor(createChild(bacterium, false));
 
@@ -159,6 +162,7 @@ public class Colony {
                 parent.getX(),
                 parent.getY(),
                 mutate ? parent.getSequence().createMutation() : parent.getSequence(),
+                options.maxAge,
                 inputListener);
 
         return child;

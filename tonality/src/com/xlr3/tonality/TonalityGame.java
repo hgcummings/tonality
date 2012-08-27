@@ -9,6 +9,7 @@ public class TonalityGame extends Game {
     private MidiPlayer midiPlayer;
 
     public static final String LOG = TonalityGame.class.getSimpleName();
+    private Options options = Options.DEFAULT;
 
     public TonalityGame(MidiPlayer midiPlayer) {
         this.midiPlayer = midiPlayer;
@@ -20,9 +21,9 @@ public class TonalityGame extends Game {
     }
 
     private void launchIntroScreen() {
-        setScreen(new IntroScreen(new GenericListener<IntroScreen.ButtonType>() {
+        setScreen(new MenuScreen(new GenericListener<MenuScreen.ButtonType>() {
             @Override
-            public void fire(IntroScreen.ButtonType payload) {
+            public void fire(MenuScreen.ButtonType payload) {
                 switch (payload) {
                     case TUTORIAL:
                         launchTutorialScreen();
@@ -30,9 +31,9 @@ public class TonalityGame extends Game {
                     case GAME:
                         launchMainScreen();
                         break;
-                    /*case OPTIONS:
+                    case OPTIONS:
                         launchOptionsScreen();
-                        break;*/
+                        break;
                     default:
                         Gdx.app.log(TonalityGame.LOG, "Unrecognised intro screen button type " + payload);
                 }
@@ -60,7 +61,7 @@ public class TonalityGame extends Game {
     private void launchMainScreen() {
         setScreen(new MainScreen(
                 midiPlayer,
-                Options.DEFAULT,
+                this.options,
                 new GenericListener<Score>() {
                     @Override
                     public void fire(Score payload) {
@@ -69,14 +70,24 @@ public class TonalityGame extends Game {
                 }));
     }
 
+    private void launchOptionsScreen() {
+        setScreen(new OptionsScreen(this.options, new GenericListener<Options>() {
+            @Override
+            public void fire(Options payload) {
+                TonalityGame.this.options = payload;
+                launchIntroScreen();
+            }
+        }));
+    }
+
     private void launchGameOverScreen(Score payload) {
         setScreen(new GameOverScreen(payload, new GenericListener<Boolean>() {
             @Override
             public void fire(Boolean payload) {
                 if (payload) {
-                    Gdx.app.exit();
-                } else {
                     launchMainScreen();
+                } else {
+                    launchIntroScreen();
                 }
             }
         }));
