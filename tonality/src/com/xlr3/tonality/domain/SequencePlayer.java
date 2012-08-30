@@ -40,5 +40,6 @@ public class SequencePlayer {
     	MidiSequenceImpl midiSequence = sequencePool.obtain();
     	midiSequence.initialise(notes, ticks, sequence);
     	midiPlayer.play(midiSequence, tempo);
+    	sequencePool.free(midiSequence);
     }
 }
